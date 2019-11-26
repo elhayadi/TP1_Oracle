@@ -1,0 +1,108 @@
+
+//QST1
+CREATE TABLE Dept (
+ deptno number(11) primary key ,
+ dname varchar(55) ,
+ loc varchar(55) ,
+ constraint dname_check CHECK( UPPER(dname) IN('ACCOUNTING','RESEARCH', 'SALES' , 'OPERATIONS') ) 
+ )
+ 
+//QST2
+ INSERT INTO Dept VALUES(10 ,'ACCOUNTING','NEW-YORK');
+ INSERT INTO Dept VALUES( 20 , 'RESEARCH','DALLAS');
+ INSERT INTO Dept VALUES( 30 , 'SALES','CHICAGO');
+ INSERT INTO Dept VALUES( 40 , 'OPERATIONS','BOSTON');
+ 
+ //QST3
+ CREATE TABLE EMP AS SELECT * FROM SCOTT.EMP;
+ 
+ /QST4
+
+ INSERT INTO EMP VALUES (7369, 'Bidon', NULL, NULL, NULL, NULL, NULL, NULL) 
+ //QST5
+ROLLBACK
+
+//QST6
+ALTER TABLE EMP 
+add (constraint cnt_pk primary key (EMPNO) ,
+     constraint cnt_fk FOREIGN KEY (DEPTNO) references Dept(DEPTNO)
+    )
+
+//QST7
+select * from emp
+
+ INSERT INTO EMP VALUES (7369, 'WILSON', 'MANAGER', 7839, '17/11/91', 3500.00, 600.00, 10) ;
+ INSERT INTO EMP VALUES (7657, 'WILSON','MANAGER', 7839, '17/11/91', 3500.00, 600.00, 50) ; 
+ INSERT INTO EMP VALUES (7657, 'WILSON', 'MANAGER', 7000,'17/11/91', 3500.00, 600.00, 10) ;
+ INSERT INTO EMP VALUES (7657, 'WILSON', 'MANAGER', 7839, '17/11/91', 3500.00,600.00, 10);
+ 
+--  /qst8
+commit
+/************mise a jour *****************/
+Update Dept
+Set LOC='PITTSBURGH' where DNAME='SALES' AND LOC ='CHICAGO'
+
+//qst 2 
+Update EMP
+Set SAL=(SAL*1.1) where  NVL(COMM,0) > (SAL/2)
+//qst3
+Update EMP
+Set Sal = (select avg(SAL) From EMP) where TO_CHAR(HIREDATE , 'dd/mm/yy') < '01/01/82' and COMM=NULL
+
+//qst4
+
+
+rollback
+
+delete from Dept where DEPTNO=20
+
+/////*************Interrogation de la base de données***********************//
+EMPNO  JOB MGR HIREDATE   DEPTNO
+select ENAME ,COMM, SAL+COMM 
+FROM EMP 
+where JOB ='SALESMAN'
+//qs2
+select ENAME 
+from EMP 
+ORDER BY COMM,SAL DESC
+
+//qst3
+
+select ENAME
+from EMP
+where COMM < (sal*0.25)
+
+//qst4
+
+select count(*)
+
+from EMP
+where DEPTNO=10
+
+//qst5
+
+select count(*)
+from EMP
+where COMM IS NOT NULL
+
+//qst 6
+select count(DISTINCT JOB)
+from EMP
+
+//qst 7
+select job, avg(SAL) as MOY
+from EMP
+group by job
+
+
+//qst 8
+
+
+
+
+
+
+
+
+
+ select sum(SAL) from EMP  //QST9
